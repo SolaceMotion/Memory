@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+	<body>
+		<div class='modal'>
+			<header>pick number of tangs</header>
+			<div class="modal-group">
+				<div class="ch1">12</div>
+				<div class="ch2">16</div>
+				<div class="ch3">20</div>
+			</div>
+		</div>
+
+    <div class="main"></div> 
+    <script>
+
+			//add dynamic plates	
+			const modalButtons = Array.from(document.querySelector(".modal-group").children)
+			
+			modalButtons.forEach((modal) => {
+				modal.addEventListener("click",() => {
+					
+
+					for (let i = 0; i < Number(modal.textContent); i++) {
+						const piece = document.createElement("div")
+						document.querySelector(".main").append(piece)
+					}
+					
+					init()
+
+					document.querySelector(".main").style.cssText += `grid-template-rows: repeat(${Math.floor(Number(modal.textContent / 4))}, 200px); grid-template-columns: repeat(${Math.floor(Number(modal.textContent / 3))}, 200px)`
+
+					document.querySelector(".modal").remove()
+				})
+			})
+			
+			//clicked state
+			let isClicked = {}
+			let clicks = 0;
+			let score = 0
+			let data = []
+			
+			let items = []
+			//fix two colors must be disctinct
+		
+			const colors = ["blue","red",'orange','yellow','blue','purple','yellow','red','orange','aqua','purple','aqua']
+	
+
+			function init() {
+			
+				items = Array.from(document.querySelector(".main").children)
+				console.log(items);
+				items.forEach((item, i) => {
+					item.dataset.img = colors[Math.floor(Math.random()*colors.length)] 
+					item.addEventListener("click",  cardFlip(item, i), {once: false})
+
+				})
+			}
+
+			const checkWin = setInterval(() => {
+				if (score == 2) {
+					console.log("you win")
+					clearInterval(checkWin)
+				}
+			}, 200)
+
+			//keep track of previous pick
+			let prev
+
+			function cardFlip (item, i){
+					return function curried(e) {
+							//guard
+							if (isClicked[i] || clicks == 2) {
+									return
+							}
+
+							//save previous pick
+							if (clicks == 0) {
+									prev = i
+							}
+							
+							data[clicks] = item.dataset.img 
+							clicks++ 
+							console.log(data)
+							console.log(i + " was clicked") 
+							//toggle click state
+							isClicked[i] = !isClicked[i]
+							
+							items[i].setAttribute("style", `background-color: ${item.dataset.img}`)
+							//check that card has been clicked
+							
+							if (clicks == 2) {
+									console.log(items[i].dataset.img == items[prev].dataset.img)
+									console.log(isClicked)
+									setTimeout(() => {
+											//clear state
+											if (data[0] == data[1]) {
+													score++
+													isClicked[prev] = true
+													isClicked[i] = true
+
+
+											} else {
+													
+													items[prev].removeAttribute("style")
+													items[i].removeAttribute("style")
+
+													delete isClicked[prev]
+													delete isClicked[i]
+											}
+											
+											//clear dataset state                        
+											data = []
+											//reset clicks
+											clicks = 0
+									}, 1000)
+							}
+					}
+			}
+        //implementation with this
+        /*
+        function cardFlip (){
+            this.setAttribute("style", "background-color: pink")
+            clicks++
+            //check that card has been clicked
+            this.clicked = true
+													for(let h in isClicked) {
+
+																	items[h].removeAttribute("style")
+													}
+            //if card has been flipped, remove card's click listener
+            if (this.clicked){
+                this.removeEventListener("click", cardFlip)
+            }
+            
+            if (clicks == 2) {
+                setTimeout(() => {
+
+                    items.forEach((item) => {
+                        item.removeAttribute("style")
+                        //reattach listener
+                        item.addEventListener("click", cardFlip)
+                    })
+                    //reset clicks
+                    clicks = 0
+                }, 2000)
+                return
+            }
+        }
+        */
+    </script>   
+</body>
+</html>

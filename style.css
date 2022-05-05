@@ -1,0 +1,80 @@
+* {
+            margin: 0;
+            padding: 0;
+        }
+        .main {
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            background-color: black;
+            place-content: center;
+        }
+
+				.main div {
+            flex-grow: 1;
+            background-color: green;
+            width: 155px;
+            height: 155px;
+            cursor: pointer;
+            transition: transform ease 150ms
+				}
+
+            .main div:hover {
+                transform: scale(1.1)
+            }
+
+
+				.modal {
+					position: absolute;
+					color: white;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%,-50%);
+					background-color: palevioletred;
+					font-size: 2rem;
+					width: 500px;
+					height: 300px;
+					text-align: center;
+				}
+
+				.modal-group {
+					display: grid;
+					grid-template-columns: 1fr 1fr 1fr;
+					grid-template-rows: 1fr 1fr 1fr;
+					justify-items: center;
+					align-items: center;
+				}
+
+				/* flex all children */
+				.ch1 {
+					width: 70px;
+					height: 70px;
+					background-color: blue;
+					grid-row: 2;
+					grid-column: 1;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+
+				.ch2 {
+					width: 70px;
+					height: 70px;
+					background-color: blue;
+					grid-row: 2;
+					grid-column: 2;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+
+				.ch3 {
+					width: 70px;
+					height: 70px;
+					background-color: blue;
+					grid-row: 2;
+					grid-column: 3;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
